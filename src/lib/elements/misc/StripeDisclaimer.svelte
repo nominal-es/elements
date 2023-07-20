@@ -9,6 +9,6 @@
         class="no-underline"
         href="https://stripe.com/docs/security"
     >
-        <i class="fa-brands fa-stripe align-middle text-2xl ml-1" />
+        <i class="fa-brands fa-stripe align-middle text-2xl" />
     </a>
 </div>

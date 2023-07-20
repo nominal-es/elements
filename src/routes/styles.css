@@ -11,3 +11,7 @@ button {
 i {
 	vertical-align: middle;
 }
+
+* {
+	font-family: 'Sora', sans-serif;
+}

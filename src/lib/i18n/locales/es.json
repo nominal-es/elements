@@ -2,5 +2,21 @@
     "continue": "continuar",
     "next": "siguiente",
     "billingAddress": "dirección de facturación",
-    "stripeDisclaimer": "su dirección de facturación y otra información confidencial es manejada de manera segura por"
+    "stripeDisclaimer": "su dirección de facturación y otra información confidencial es manejada de manera segura por",
+    "checkout": {
+        "pay": "pagar",
+        "subscribe": "suscribirse",
+        "payAndSubscribe": "pagar y suscribirse",
+        "totalDueToday": "a pagar hoy",
+        "startingIn": "dentro de",
+        "provider": "este servicio de pago esta siendo servido por",
+        "agreement": "un producto de nominal.es. Al continuar, acepta nuestras políticas de privacidad, reembolso y términos de uso."
+    },
+    "frequency": {
+        "year": "año",
+        "month": "mes",
+        "week": "semana",
+        "day": "day",
+        "now": "now"
+    }
 }

@@ -1,7 +1,10 @@
 <script lang="ts">
-    import { Stripe } from "stripe";
-    import { loadStripe } from "@stripe/stripe-js";
-    import StripeDisclaimer from "./StripeDisclaimer.svelte";
+    import type { Stripe } from "stripe";
+    import {
+        loadStripe,
+        type StripeAddressElementOptions,
+    } from "@stripe/stripe-js";
+    import StripeDisclaimer from "../misc/StripeDisclaimer.svelte";
     import { onMount } from "svelte";
     import { Button } from "$components/ui/button";
     import { _ } from "svelte-i18n";
@@ -34,12 +37,17 @@
         });
 
         const emailElement = elements.create("linkAuthentication", {
-            defaultValues: customer?.email ? {
-                email: customer?.email,
-            } : undefined
+            defaultValues: customer?.email
+                ? {
+                      email: customer?.email,
+                  }
+                : undefined,
         });
+        emailElement.mount("#email");
 
-        const addressElement = elements.create("address", {
+        const addressElement = elements.create("address", <
+            StripeAddressElementOptions
+        >{
             mode: "billing",
             defaultValues: {
                 name: customer?.name,
@@ -48,6 +56,8 @@
                 address: customer?.address,
             },
         });
+        addressElement.mount("#address");
+
         const dummyElement = elements.create("payment", {
             readOnly: true,
             wallets: {
@@ -55,8 +65,6 @@
                 googlePay: "never",
             },
         });
-        addressElement.mount("#address");
-        emailElement.mount("#email");
         dummyElement.mount("#dummy");
     });
 </script>

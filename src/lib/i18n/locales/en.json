@@ -2,5 +2,22 @@
     "continue": "continue",
     "next": "next",
     "billingAddress": "billing address",
-    "stripeDisclaimer": "your billing address, and other sensitive information, is handled safely by"
+    "stripeDisclaimer": "your billing address, and other sensitive information, is handled safely by",
+    "checkout": {
+        "pay": "pay",
+        "subscribe": "subscribe",
+        "payAndSubscribe": "pay and subscribe",
+        "thenAfter": "then, after",
+        "totalDueToday": "total due today",
+        "startingIn": "starting in",
+        "provider": "this checkout service is being provided by ",
+        "agreement": "a nominal.es product. By continuing, you accept our privacy policy, refund policy, and terms of use."
+    },
+    "time": {
+        "year": "year",
+        "month": "month",
+        "week": "week",
+        "day:": "day",
+        "now": "now"
+    }
 }
