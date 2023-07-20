@@ -9,7 +9,7 @@ register('es', () => import('./locales/es.json'))
 
 init({
     fallbackLocale: defaultLocale,
-    initialLocale: getLocaleFromNavigator(),
+    initialLocale: getLocaleFromNavigator() ?? defaultLocale,
 });
 
 let lang: string = defaultLocale
