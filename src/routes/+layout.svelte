@@ -3,7 +3,7 @@
   import "./styles.css";
 
   import "$lib/i18n"; // Import to initialize. Important :)
-  import { _, locale, waitLocale } from "svelte-i18n";
+  import { _, locale, waitLocale, isLoading } from "svelte-i18n";
   import { setCurrentLocale } from "$lib/i18n";
 
   export const preload = async () => {
@@ -14,6 +14,10 @@
 
 <div class="app">
   <main class="container max-w-xl py-5 flex flex-col gap-5">
-    <slot />
+    {#if $isLoading}
+      ...
+    {:else}
+      <slot />
+    {/if}
   </main>
 </div>
