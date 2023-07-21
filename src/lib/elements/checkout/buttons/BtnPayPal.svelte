@@ -1,20 +1,26 @@
 <script lang="ts">
-    import { createEventDispatcher, onMount } from "svelte";
-    import type { display } from "../../../../app";
+    import Skeleton from "$components/ui/skeleton/Skeleton.svelte";
+    import PayPalLoader from "$lib/elements/misc/PayPalLoader.svelte";
+    import type { Checkout, display } from "$lib/types";
+    import { createEventDispatcher } from "svelte";
+
+    export let display: display;
+    export let checkout: Checkout;
 
     const dispatch = createEventDispatcher();
 
-    let display: display;
-    let paypal: any;
+    let loading = true;
 
-    onMount(async () => {
-        const button = paypal
+    function load(ev: CustomEvent<any>) {
+        const paypal = ev.detail
+        paypal
             .Buttons({
-                '{{"createSubscription" if recurrent else "createOrder"}}':
-                    async () => {
-                        const { action } = await getIntent("paypal");
-                        return action;
-                    },
+                createSubscription: checkout.isSubscription
+                    ? checkout.methods.paypal.action
+                    : undefined,
+                createOrder: !checkout.isSubscription
+                    ? checkout.methods.paypal.action
+                    : undefined,
                 onApprove: (d?: any) => dispatch("paid", d),
                 style: {
                     height: 48,
@@ -22,10 +28,11 @@
                 },
             })
             .render("#paypal-buttons");
-    });
+        loading = false;
+    }
 </script>
 
-{#if display.dark}
+{#if !display.dark}
     <style>
         iframe[title="PayPal Checkout Overlay"] {
             filter: invert(1) !important;
@@ -33,4 +40,9 @@
     </style>
 {/if}
 
-<div id="paypal-buttons" />
+<PayPalLoader on:paypal={load} {checkout} />
+
+{#if loading}
+<Skeleton class="h-[48px]" />
+{/if}
+<div class:hidden={loading} id="paypal-buttons" />

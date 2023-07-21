@@ -7,14 +7,27 @@
     import TrialBadge from "../misc/TrialBadge.svelte";
     import VerifiedBadge from "../misc/VerifiedBadge.svelte";
     import ReadableAmount from "../misc/ReadableAmount.svelte";
-    import { Skeleton } from "$components/ui/skeleton";
 
     export let checkout: Checkout;
     export let display: display;
 
+    let error: Error | null = null;
+
     import { _ } from "svelte-i18n";
     import CardStripe from "./cards/CardStripe.svelte";
+    import BtnPayPal from "./buttons/BtnPayPal.svelte";
     import ExpressStripe from "./express/ExpressStripe.svelte";
+    import Alert from "$components/ui/alert/Alert.svelte";
+    import AlertDescription from "$components/ui/alert/AlertDescription.svelte";
+
+    function errorHandler(event: CustomEvent<Error>) {
+        if (!event.detail) {
+            // ensure null type
+            error = null;
+        } else {
+            error = error;
+        }
+    }
 </script>
 
 <!-- amount description -->
@@ -79,6 +92,14 @@
     {/if}
 </section>
 
+{#if error}
+    <Alert>
+        <AlertDescription>
+            {error.message}
+        </AlertDescription>
+    </Alert>
+{/if}
+
 <!-- express buttons (google pay, apple pay, etc) -->
 <section id="express">
     <ExpressStripe {display} {checkout} />
@@ -86,12 +107,12 @@
 
 <!-- card forms -->
 <section id="card">
-    <CardStripe {display} {checkout} />
+    <CardStripe on:error={errorHandler} {display} {checkout} />
 </section>
 
 <!-- external buttons -->
 <section id="buttons">
-    <Skeleton class="w-full h-[150px] rounded" />
+    <BtnPayPal {display} {checkout} />
 </section>
 
 <!-- disclaimer -->

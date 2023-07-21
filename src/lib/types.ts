@@ -122,7 +122,6 @@ class Checkout {
     readonly app: App | null
     readonly address: Address | null
 
-
     constructor(audience: string, methods: Record<string, Method>, upfront: Amount, address: Address | null = null, offset: number = 0, upcoming: Amount | null = null, app: App | null = null) {
         this.audience = audience
         this.methods = methods
@@ -148,6 +147,10 @@ class Checkout {
             units: ["mo", "w", "d"],
             round: true,
         })
+    }
+
+    get isSubscription() {
+        return this.upfront.frequency != null || this.upcoming?.frequency != null
     }
 }
 
