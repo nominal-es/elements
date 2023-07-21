@@ -13,7 +13,7 @@ export const load = async ({url}) => {
     
     if (errored) return;
     const checkout: Checkout = await Checkout.fromSecret(secret!);
-    if (await checkout.check()) {
+    if (false /*await checkout.check()*/) {
         if (origin != "self") {
             // origin should be able to notice the payment success
             throw redirect(302, origin! + "?checkout_success");
