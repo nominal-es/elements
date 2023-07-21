@@ -15,7 +15,7 @@
         const elements = await checkout.methods.stripe.instance(display);
 
         const wallet = Method.stripe!.paymentRequest({
-            country: checkout.address?.country!,
+            country: checkout.billing.address?.country!,
             currency: checkout.upfront.currency,
             requestShipping: false,
             disableWallets: ["link"],
@@ -41,12 +41,12 @@
                         await checkout.methods.stripe.action()
                     );
                     if (error) {
-                        dispatch('error', error);
+                        dispatch("error", error);
                     } else {
-                        dispatch('success')
+                        dispatch("success");
                     }
                 } else {
-                    dispatch('success')
+                    dispatch("success");
                 }
             }
         });

@@ -3,13 +3,15 @@ import { currentLocale } from "./i18n"
 import { loadStripe, type Stripe } from "@stripe/stripe-js";
 import { PUBLIC_STRIPE_PK } from "$env/static/public";
 import type { Address, StripeElements } from "@stripe/stripe-js";
+import type { PaymentMethodCreateParams } from "@stripe/stripe-js";
 
 const production: boolean = process.env.NODE_ENV === 'production'
 const api: string = production ? 'api.nominal.es' : 'dev.nominal.es'
 
 type display = {
     popup: boolean,
-    dark: boolean
+    dark: boolean,
+    origin?: string
 }
 
 class Method {
@@ -114,22 +116,24 @@ type App = {
 }
 
 class Checkout {
+    readonly secret: string
     readonly audience: string
     readonly methods: Record<string, Method>
     readonly upfront: Amount
     private readonly offset: number
     readonly upcoming: Amount | null
     readonly app: App | null
-    readonly address: Address | null
+    readonly billing: PaymentMethodCreateParams.BillingDetails
 
-    constructor(audience: string, methods: Record<string, Method>, upfront: Amount, address: Address | null = null, offset: number = 0, upcoming: Amount | null = null, app: App | null = null) {
+    constructor(secret: string, audience: string, methods: Record<string, Method>, upfront: Amount, billing: PaymentMethodCreateParams.BillingDetails, offset: number = 0, upcoming: Amount | null = null, app: App | null = null) {
+        this.secret = secret
         this.audience = audience
         this.methods = methods
         this.upfront = upfront
         this.offset = offset
         this.upcoming = upcoming
         this.app = app
-        this.address = address
+        this.billing = billing
     }
 
     get displayName(): string {
@@ -151,6 +155,41 @@ class Checkout {
 
     get isSubscription() {
         return this.upfront.frequency != null || this.upcoming?.frequency != null
+    }
+
+    public async check(): Promise<boolean> {
+        // TODO if paid, returns true
+        await new Promise(resolve => setTimeout(resolve, 500))
+        return true
+    }
+
+    public static async fromSecret(secret: string): Promise<Checkout> {
+        // TODO actually fetch
+        await new Promise(resolve => setTimeout(resolve, 500))
+        return new Checkout(
+            secret,
+            'serverbench.io',
+            {
+                stripe: new Method("stripe", "-", "-", "payment", "pi_3NVyJ3CA7uvn961o03OQUtd0_secret_IgIq5ufxHKjmCJ8b9lR4r4qpb"),
+                paypal: new Method("paypal", "-", "-", "payment", "pi_3NVyJ3CA7uvn961o03OQUtd0_secret_IgIq5ufxHKjmCJ8b9lR4r4qpb"),
+            },
+            new Amount("eur", 25, 21, "IVA"),
+            {
+                address: {
+                    city: "Barcelona",
+                    country: "ES",
+                    line1: "Carrer de Mallorca",
+                    line2: "Sagrada Familia",
+                    postal_code: "08017",
+                    state: "Barcelona",
+                },
+                email: 'axolotl@ocean.org',
+                name: 'Billy The Axolotl',
+                phone: '+0 00000000000'
+            },
+            7,
+            new Amount("eur", 10, 21, "IVA", "month")
+        )
     }
 }
 
