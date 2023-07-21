@@ -12,7 +12,7 @@
     let loading = true;
 
     function load(ev: CustomEvent<any>) {
-        const paypal = ev.detail
+        const paypal = ev.detail;
         paypal
             .Buttons({
                 createSubscription: checkout.isSubscription
@@ -21,7 +21,7 @@
                 createOrder: !checkout.isSubscription
                     ? checkout.methods.paypal.action
                     : undefined,
-                onApprove: (d?: any) => dispatch("paid", d),
+                onApprove: (d?: any) => dispatch("success"),
                 style: {
                     height: 48,
                     color: display.dark ? "black" : "silver",
@@ -43,6 +43,6 @@
 <PayPalLoader on:paypal={load} {checkout} />
 
 {#if loading}
-<Skeleton class="h-[48px]" />
+    <Skeleton class="h-[48px]" />
 {/if}
 <div class:hidden={loading} id="paypal-buttons" />
