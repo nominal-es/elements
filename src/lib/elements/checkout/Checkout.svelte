@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { Checkout, display } from "$lib/types";
 
-    import { Plus } from "lucide-svelte";
+    import { Pen, Plus } from "lucide-svelte";
 
     import TaxBadge from "../misc/TaxBadge.svelte";
     import TrialBadge from "../misc/TrialBadge.svelte";
@@ -20,6 +20,11 @@
     import Alert from "$components/ui/alert/Alert.svelte";
     import AlertDescription from "$components/ui/alert/AlertDescription.svelte";
     import Skeleton from "$components/ui/skeleton/Skeleton.svelte";
+    import Card from "$components/ui/card/Card.svelte";
+    import CardContent from "$components/ui/card/CardContent.svelte";
+    import CardFooter from "$components/ui/card/CardFooter.svelte";
+    import CardHeader from "$components/ui/card/CardHeader.svelte";
+    import { Button } from "$components/ui/button";
 
     function errorHandler(event: CustomEvent<Error>) {
         console.log(event);
@@ -121,6 +126,45 @@
             {checkout}
         />
     {/if}
+
+    <!-- addresss -->
+    <section>
+        <Card>
+            <CardContent
+                class="text-foreground flex flex-row items-center py-3 text-sm"
+            >
+                <div class="grow flex flex-col gap-1">
+                    <p>
+                        {checkout.billing.email}
+                    </p>
+                    <div
+                        class="text-muted-foreground text-xs flex flex-row gap-2 items-center"
+                    >
+                        <span>
+                            {checkout.billing.address?.country}
+                        </span>
+                        <span>
+                            {checkout.billing.address?.state}
+                        </span>
+                        <span>
+                            {checkout.billing.address?.postal_code}
+                        </span>
+                        <span>
+                            {checkout.billing.name}
+                        </span>
+                    </div>
+                </div>
+                <Button
+                    href="/checkout/address"
+                    size="sm"
+                    variant="link"
+                    class="text-primary-foreground"
+                >
+                    <Pen size={17} />
+                </Button>
+            </CardContent>
+        </Card>
+    </section>
 
     <!-- card forms -->
     <section id="card">
