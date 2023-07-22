@@ -14,7 +14,6 @@
     } from "@stripe/stripe-js";
     import Skeleton from "$components/ui/skeleton/Skeleton.svelte";
     import { ChevronRight, Loader2 } from "lucide-svelte";
-    import { redirect } from "@sveltejs/kit";
     import { goto } from "$app/navigation";
 
     export let display: display;
@@ -58,9 +57,7 @@
             completed.email = ev.complete;
         });
 
-        addressElement = elements!.create("address", <
-            StripeAddressElementOptions
-        >{
+        addressElement = elements!.create("address", {
             mode: "billing",
             defaultValues: {
                 name: customer?.name,
@@ -68,7 +65,7 @@
                 phone: customer?.phone,
                 address: customer?.address,
             },
-        });
+        } as StripeAddressElementOptions);
         addressElement.mount("#address");
         addressElement.on("loaderstart", () => mounted++);
         addressElement.on("change", (ev) => {
@@ -130,11 +127,13 @@
 
 <!-- disclaimer -->
 <section class="flex flex-row gap-5 items-center">
-    <StripeDisclaimer />
+    <div class="hidden md:block">
+        <StripeDisclaimer />
+    </div>
     <Button
         disabled={!complete || loading}
         on:click={submit}
-        class="flex flex-row gap-1 capitalize"
+        class="flex flex-row gap-1 capitalize ml-auto"
         variant="default"
     >
         {#if !loading}
@@ -145,3 +144,6 @@
         {/if}
     </Button>
 </section>
+<div class="md:hidden">
+    <StripeDisclaimer />
+</div>
