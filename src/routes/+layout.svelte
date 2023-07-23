@@ -13,7 +13,7 @@
 </script>
 
 <div class="app">
-  <main class="container max-w-xl py-5 flex flex-col gap-5">
+  <main class="container max-w-xl py-5 flex flex-col gap-5 px-3">
     {#if $isLoading}
       ...
     {:else}

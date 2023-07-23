@@ -22,8 +22,6 @@
     import Skeleton from "$components/ui/skeleton/Skeleton.svelte";
     import Card from "$components/ui/card/Card.svelte";
     import CardContent from "$components/ui/card/CardContent.svelte";
-    import CardFooter from "$components/ui/card/CardFooter.svelte";
-    import CardHeader from "$components/ui/card/CardHeader.svelte";
     import { Button } from "$components/ui/button";
 
     function errorHandler(event: CustomEvent<Error>) {

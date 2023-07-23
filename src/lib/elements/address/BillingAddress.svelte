@@ -13,8 +13,9 @@
         StripePaymentElement,
     } from "@stripe/stripe-js";
     import Skeleton from "$components/ui/skeleton/Skeleton.svelte";
-    import { ChevronRight, Loader2 } from "lucide-svelte";
+    import { ChevronRight, Info, Loader2 } from "lucide-svelte";
     import { goto } from "$app/navigation";
+    import { HoverCard, HoverCardContent, HoverCardTrigger } from "$components/ui/hover-card";
 
     export let display: display;
     export let checkout: Checkout | null;
@@ -124,16 +125,24 @@
     {/each}
 {/if}
 <div class:hidden={mounting} id="address" />
-
-<!-- disclaimer -->
-<section class="flex flex-row gap-5 items-center">
+<section class="flex flex-row gap-5 items-center justify-end">
     <div class="hidden md:block">
         <StripeDisclaimer />
     </div>
+    <HoverCard>
+        <HoverCardTrigger>
+            <Button class="md:hidden" variant="link">
+                <Info />
+            </Button>
+        </HoverCardTrigger>
+        <HoverCardContent class="w-80">
+            <StripeDisclaimer />
+        </HoverCardContent>
+    </HoverCard>
     <Button
         disabled={!complete || loading}
         on:click={submit}
-        class="flex flex-row gap-1 capitalize ml-auto"
+        class="flex flex-row gap-1 capitalize"
         variant="default"
     >
         {#if !loading}
@@ -144,6 +153,3 @@
         {/if}
     </Button>
 </section>
-<div class="md:hidden">
-    <StripeDisclaimer />
-</div>

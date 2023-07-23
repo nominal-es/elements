@@ -115,6 +115,94 @@ type App = {
     id: string,
 }
 
+class Refund {
+    readonly issued: Date
+    readonly amount: Amount
+    readonly completed: Date | null
+
+    constructor(issued: Date, amount: Amount, completed: Date | null) {
+        this.issued = issued
+        this.amount = amount
+        this.completed = completed
+    }
+}
+
+class Dispute {
+    readonly created: Date
+    readonly archived: Date | null
+
+    constructor(created: Date, archived: Date | null) {
+        this.created = created
+        this.archived = archived
+    }
+}
+
+class Payment {
+    readonly created: Date
+    readonly audience: string
+    readonly amount: Amount
+    readonly gateway: string
+    readonly refunds: Refund[]
+    readonly disputes: Dispute[]
+    readonly app: App | null
+
+    constructor(created: Date, audience: string, amount: Amount, gateway: string, refunds: Refund[], disputes: Dispute[], app: App | null = null) {
+        this.created = created
+        this.audience = audience
+        this.amount = amount
+        this.gateway = gateway
+        this.refunds = refunds
+        this.disputes = disputes
+        this.app = app
+    }
+}
+
+class Source {
+    readonly gateway: string
+    readonly lastError: Date | null
+    constructor(gateway: string, lastError: Date | null) {
+        this.gateway = gateway
+        this.lastError = lastError
+    }
+}
+
+type description = {
+    title?: string,
+    slug: string
+}
+
+class Subscription {
+    readonly created: Date
+    readonly offset: number
+    readonly amount: Amount
+    readonly source: Source | null
+    readonly cancelled: Date | null
+    readonly payments: Payment[]
+    readonly app: App | null
+    readonly audience: string
+    readonly description: description
+
+    constructor(created: Date, audience: string, description: description, app: App | null, offset: number, amount: Amount, source: Source | null, cancelled: Date | null, payments: Payment[]) {
+        this.created = created
+        this.app = app
+        this.audience = audience
+        this.description = description
+        this.offset = offset
+        this.amount = amount
+        this.source = source
+        this.cancelled = cancelled
+        this.payments = payments
+    }
+
+    get isTrialing() {
+        return true
+    }
+
+    get displayName() {
+        return this.app?.name ?? this.audience
+    }
+}
+
 class Checkout {
     readonly secret: string
     readonly audience: string
@@ -197,7 +285,11 @@ class Checkout {
 export {
     Checkout,
     Method,
-    Amount
+    Amount,
+    Payment,
+    Subscription,
+    Refund,
+    Dispute
 }
 
 export type { display }
