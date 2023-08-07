@@ -13,6 +13,33 @@
         "provider": "this checkout service is being provided by ",
         "agreement": "a nominal.es product. By continuing, you accept our privacy policy, refund policy, and terms of use."
     },
+    "payment": {
+        "subscriptionRelated": "This payment is related to a subscription. If you want to manage the subscription related to this payment, please, do so by clicking here",
+        "issued": "issued",
+        "completed": "completed",
+        "open": "open",
+        "closed": "closed",
+        "disputes": "disputes",
+        "noDisputes": "no disputes",
+        "refunds": "refunds",
+        "noRefunds": "no refunds",
+        "paidUsing": "paid using",
+        "completedOn": "completed on"
+    },
+    "subscription": {
+        "manage": "manage subscription",
+        "addCard": "add card",
+        "attachPaymentMethod": "attach a payment method",
+        "paymentMethod": "payment method",
+        "noPaymentMethod": "This subscription doesn't have any attached payment methods. You can provide one here in order to automatically renew your subscription.",
+        "pastDueNotice": "You have past due payments, please, fulfill them as soon as possible, or any goods related to this subscription may be terminated.",
+        "payments": "payments",
+        "trialing": "trialing",
+        "cancelled": "cancelled",
+        "active": "active",
+        "cancelSubscription": "cancel subscription",
+        "cancel": "Cancel"
+    },
     "time": {
         "year": "year",
         "month": "month",

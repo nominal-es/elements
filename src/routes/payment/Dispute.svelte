@@ -11,7 +11,7 @@
     export let dispute: Dispute;
 </script>
 
-<div class="flex gap-3 flex-row items-center capitalize">
+<div class="flex gap-3 flex-row items-center capitalize justify-between">
     {dispute.created.toLocaleDateString()}
     {#if dispute.archived}
         <TooltipProvider>

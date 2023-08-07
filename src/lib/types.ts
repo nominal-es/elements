@@ -2,7 +2,7 @@ import humanizeDuration from "humanize-duration"
 import { currentLocale } from "./i18n"
 import { loadStripe, type Stripe } from "@stripe/stripe-js";
 import { PUBLIC_STRIPE_PK } from "$env/static/public";
-import type { Address, StripeElements } from "@stripe/stripe-js";
+import type { Address, StripeCardElement, StripeElements, StripePaymentElement } from "@stripe/stripe-js";
 import type { PaymentMethodCreateParams } from "@stripe/stripe-js";
 
 const production: boolean = process.env.NODE_ENV === 'production'
@@ -22,16 +22,15 @@ class Method {
     private readonly intent: string
     private _action: string | null
 
-    private _stripeInstance: StripeElements | null
+    private static _stripeInstance: StripeElements | null
     private static _stripe: Stripe | null
 
-    constructor(slug: string, clientId: string, secret: string, intent: string, action: string | null = null, stripeInstance: any | null = null) {
+    constructor(slug: string, clientId: string, secret: string, intent: string, action: string | null = null) {
         this.slug = slug
         this.clientId = clientId
         this.secret = secret
         this.intent = intent
         this._action = action
-        this._stripeInstance = stripeInstance
     }
 
     static get stripe() {
@@ -56,32 +55,41 @@ class Method {
         return this._action
     }
 
-    async instance(display: display) {
-        if (this.slug == 'stripe') {
-            if (!Method._stripe) {
-                Method._stripe = await loadStripe(PUBLIC_STRIPE_PK);
-            }
-            if (!this._stripeInstance) {
-                this._stripeInstance = Method._stripe!.elements({
-                    appearance: {
-                        theme: display.dark ? 'night' : 'stripe',
-                        rules: {
-                            '.Tab': {
-                                boxShadow: 'none'
-                            },
-                            '.Input': {
-                                boxShadow: 'none'
-                            }
+    static async getStripe(): Promise<Stripe | null> {
+        if (!Method._stripe) {
+            Method._stripe = await loadStripe(PUBLIC_STRIPE_PK);
+            console.log(Method._stripe)
+        }
+        return Method._stripe
+    }
+
+    static async elementsInstance(display: display, secret: string) {
+        if (!this._stripeInstance) {
+            this._stripeInstance = (await Method.getStripe())!.elements({
+                appearance: {
+                    theme: display.dark ? 'night' : 'stripe',
+                    rules: {
+                        '.Tab': {
+                            boxShadow: 'none'
                         },
-                        variables: {
-                            colorPrimary: '#' + (display.dark ? 'ffffff' : '000000'),
-                            colorBackground: '#' + (display.dark ? '2c2e2f' : 'f7f7f7')
+                        '.Input': {
+                            boxShadow: 'none'
                         }
                     },
-                    clientSecret: await this.action()
-                })
-            }
-            return this._stripeInstance
+                    variables: {
+                        colorPrimary: '#' + (display.dark ? 'ffffff' : '000000'),
+                        colorBackground: '#' + (display.dark ? '2c2e2f' : 'f7f7f7')
+                    }
+                },
+                clientSecret: secret
+            })
+        }
+        return this._stripeInstance
+    }
+
+    async instance(display: display) {
+        if (this.slug == 'stripe') {
+            return Method.elementsInstance(display, await this.action())
         }
     }
 
@@ -198,6 +206,16 @@ class Subscription {
         return true
     }
 
+    async requestSetupIntent(): Promise<string> {
+        await new Promise(resolve => setTimeout(resolve, 500))
+        return 'seti_1N5qfyCA7uvn961ovnodUG90_secret_NrZp3TN9fqP4SxHTTdZPXR2oZFBPMZN'
+    }
+
+    async getSetup(display: display): Promise<StripePaymentElement> {
+        const stripe = await Method.elementsInstance(display, await this.requestSetupIntent())
+        return stripe.create('payment')
+    }
+
     get displayName() {
         return this.app?.name ?? this.audience
     }
@@ -281,6 +299,23 @@ class Checkout {
     }
 }
 
+function emit(name: string, data: any = null, pub: boolean = false) {
+    let target = pub ? '*' : location.origin;
+    const payload = JSON.stringify({
+        name,
+        data,
+    });
+    if (window.top) {
+        window.top.postMessage(payload, target);
+    }
+    if (window.parent) {
+        window.parent.postMessage(payload, target);
+    }
+    if (window.opener) {
+        window.opener.postMessage(payload, target);
+    }
+}
+
 
 export {
     Checkout,
@@ -289,7 +324,8 @@ export {
     Payment,
     Subscription,
     Refund,
-    Dispute
+    Dispute,
+    emit
 }
 
 export type { display }

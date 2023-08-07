@@ -1,22 +1,24 @@
 <script lang="ts">
+    import { _ } from "svelte-i18n";
     import { Alert } from "$components/ui/alert";
     import { Badge } from "$components/ui/badge";
     import { Button } from "$components/ui/button";
     import { Card, CardHeader } from "$components/ui/card";
-    import CardContent from "$components/ui/card/CardContent.svelte";
     import CardFooter from "$components/ui/card/CardFooter.svelte";
     import CardTitle from "$components/ui/card/CardTitle.svelte";
     import ReadableAmount from "$lib/elements/misc/ReadableAmount.svelte";
     import TaxBadge from "$lib/elements/misc/TaxBadge.svelte";
     import VerifiedBadge from "$lib/elements/misc/VerifiedBadge.svelte";
-    import { Amount, Subscription } from "$lib/types";
+    import { Amount, Subscription, type display } from "$lib/types";
     import {
+        Cog,
         FastForward,
         Loader2,
         RefreshCw,
         RefreshCwOff,
-        WalletCards,
     } from "lucide-svelte";
+    import PaymentSource from "./PaymentSource.svelte";
+    import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "$components/ui/dialog";
 
     export let subscription: Subscription = new Subscription(
         new Date(),
@@ -31,6 +33,11 @@
         null,
         []
     );
+
+    const display: display = {
+        dark: true,
+        popup: false,
+    };
 </script>
 
 <div class="flex flex-row items-center gap-3 justify-center">
@@ -48,18 +55,24 @@
         <div class="flex flex-row items-center gap-3">
             <TaxBadge amount={subscription.amount} />
             {#if subscription.cancelled}
-                <Badge class="flex flex-row items-center gap-1 py-1 !mt-0">
-                    Cancelled
+                <Badge
+                    class="flex flex-row items-center gap-1 py-1 !mt-0 capitalize"
+                >
+                    {$_("subscription.cancelled")}
                     <RefreshCwOff size={16} />
                 </Badge>
             {:else if subscription.isTrialing}
-                <Badge class="flex flex-row items-center gap-1 py-1 !mt-0">
-                    Trialing
+                <Badge
+                    class="flex flex-row items-center gap-1 py-1 !mt-0 capitalize"
+                >
+                    {$_("subscription.trialing")}
                     <FastForward size={16} />
                 </Badge>
             {:else}
-                <Badge class="flex flex-row items-center gap-1 py-1 !mt-0">
-                    Active
+                <Badge
+                    class="flex flex-row items-center gap-1 py-1 !mt-0 capitalize"
+                >
+                    {$_("subscription.active")}
                     <RefreshCw size={16} />
                 </Badge>
             {/if}
@@ -67,37 +80,37 @@
     </CardHeader>
 </Card>
 <Alert variant="destructive">
-    You have past due payments, please, fulfill them as soon as possible, or any
-    goods related to this subscription may be terminated.
+    {$_("subscription.pastDueNotice")}
 </Alert>
+<PaymentSource {subscription} {display} />
 <Card>
     <CardHeader>
-        <CardTitle>Payment Method</CardTitle>
-    </CardHeader>
-    <CardContent>
-        {#if subscription.source}
-            source details
-        {:else}
-            This subscription doesn't have any attached payment methods. You can
-            provide one here in order to automatically renew your subscription.
-        {/if}
-    </CardContent>
-    <CardFooter>
-        <Button class="w-full capitalize flex flex-row gap-3">
-            Attach a payment method
-            <WalletCards />
-        </Button>
-    </CardFooter>
-</Card>
-<Card>
-    <CardHeader>
-        <CardTitle>Payments</CardTitle>
+        <CardTitle>
+            {$_("subscription.payments")}
+        </CardTitle>
     </CardHeader>
     <CardFooter>
         <Loader2 class="animate-spin mx-auto" />
     </CardFooter>
 </Card>
-<Button variant="outline" class="capitalize flex flex-row gap-3">
-    Cancel Subscription
-    <RefreshCwOff size={16} />
-</Button>
+
+<Dialog modal={true}>
+    <DialogTrigger>
+        <Button variant="outline" class="capitalize flex flex-row gap-3 w-full">
+            {$_("subscription.manage")}
+            <Cog size={16} />
+        </Button>
+    </DialogTrigger>
+    <DialogContent class="sm:max-w-[425px]">
+        <DialogHeader>
+            <DialogTitle>
+                {$_("subscription.manage")}
+            </DialogTitle>
+        </DialogHeader>
+        <DialogFooter>
+            <Button class="capitalize">
+                {$_("action.cancel")}
+            </Button>
+        </DialogFooter>
+    </DialogContent>
+</Dialog>

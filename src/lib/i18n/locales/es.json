@@ -12,6 +12,33 @@
         "provider": "este servicio de pago esta siendo servido por",
         "agreement": "un producto de nominal.es. Al continuar, acepta nuestras políticas de privacidad, reembolso y términos de uso."
     },
+    "payment": {
+        "subscriptionRelated": "Este pago está relacionado con una suscripción. Si desea gestionar la suscripción relacionada con este pago, por favor, hágalo pinchando aquí",
+        "issued": "emitido",
+        "completed": "completado",
+        "open": "abierta",
+        "closed": "cerrada",
+        "disputes": "disputas",
+        "refunds": "reembolsos",
+        "paidUsing": "pagado utilizando",
+        "completedOn": "completado el"
+    },
+    "subscription": {
+        "manage": "administrar suscripción",
+        "addCard": "añadir tarjeta",
+        "attachPaymentMethod": "enlazar método de pago",
+        "paymentMethod": "método de pago",
+        "noPaymentMethod": "Esta suscripción no tiene ningún método de pago adjunto. Puede proporcionar uno aquí para renovar automáticamente su suscripción.",
+        "pastDueNotice": "Tiene pagos atrasados, por favor, cúmplalos lo antes posible, o cualquier bien relacionado con esta suscripción puede ser cancelado.",
+        "payments": "pagos",
+        "trialing": "probando",
+        "cancelled": "cancelada",
+        "active": "activa",
+        "cancelSubscription": "cancelar suscripción"
+    },
+    "action":{
+        "cancel": "cancelar"
+    },
     "frequency": {
         "year": "año",
         "month": "mes",

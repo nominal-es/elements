@@ -13,7 +13,12 @@
 </script>
 
 <div class="flex gap-3 flex-row items-center capitalize">
-    {refund.issued.toLocaleDateString()}
+    <span>
+        {refund.issued.toLocaleDateString()}
+    </span>
+    <span class="grow">
+        {refund.amount.str()}
+    </span>
     {#if refund.completed}
         <TooltipProvider>
             <Tooltip>
@@ -28,7 +33,4 @@
     {:else}
         <Badge>issued</Badge>
     {/if}
-    <div class="ml-auto">
-        <ReadableAmount amount={refund.amount} />
-    </div>
 </div>

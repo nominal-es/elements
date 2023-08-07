@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { _ } from "svelte-i18n";
+
     import { Button } from "$components/ui/button";
     import { Card, CardContent } from "$components/ui/card";
     import CardDescription from "$components/ui/card/CardDescription.svelte";
@@ -53,7 +55,15 @@
     <Separator />
     <CardFooter class="py-3">
         <CardDescription>
-            Paid using {payment.gateway} on {payment.created.toLocaleDateString()}
+            <!-- TODO fix caps -->
+            <span class="first-letter:uppercase">
+                {$_("payment.paidUsing")}
+                {payment.gateway}.
+            </span>
+            <span class="first-letter:uppercase">
+                {$_("payment.completedOn")}
+                {payment.created.toLocaleDateString()}
+            </span>
         </CardDescription>
     </CardFooter>
 </Card>
@@ -61,7 +71,7 @@
 <Card>
     {#if payment.refunds.length > 0}
         <CardHeader class="pt-5 pb-3">
-            <CardTitle>Refunds</CardTitle>
+            <CardTitle>{$_("payment.refunds")}</CardTitle>
         </CardHeader>
         <CardContent>
             <Card class="p-3 flex flex-col gap-3">
@@ -72,7 +82,7 @@
         </CardContent>
     {:else}
         <p class="py-5 text-center text-muted-foreground text-sm">
-            No disputes
+            {$_("payment.noRefunds")}
         </p>
     {/if}
 </Card>
@@ -80,7 +90,7 @@
 <Card>
     {#if payment.disputes.length > 0}
         <CardHeader class="pt-5 pb-3">
-            <CardTitle>Disputes</CardTitle>
+            <CardTitle>{$_("payment.disputes")}</CardTitle>
         </CardHeader>
         <CardContent>
             <Card class="p-3 flex flex-col gap-3">
@@ -91,13 +101,12 @@
         </CardContent>
     {:else}
         <p class="py-5 text-center text-muted-foreground text-sm">
-            No disputes
+            {$_("payment.noDisputes")}
         </p>
     {/if}
 </Card>
 
 <Alert>
-    This payment is related to a subscription. If you want to manage the
-    subscription related to this payment, please, do so by clicking here
+    {$_("payment.subscriptionRelated")}
 </Alert>
-<Button>Manage Subscription</Button>
+<Button class="capitalize">{$_("subscription.manage")}</Button>
